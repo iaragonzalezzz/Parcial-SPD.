@@ -1,1 +1,240 @@
+// C++ code
 
+//Definimos cada pin con su respectivo elemento
+
+#define PULSADOR_RESET 4
+#define PULSADOR_SUBE 3
+#define PULSADOR_BAJA 2
+#define UNIDAD A0
+#define DECENA A1
+#define A 10
+#define B 11
+#define C 5
+#define D 6
+#define E 7
+#define F 9
+#define G 8
+#define OFF 0
+
+//Declaramos variables
+int contador = 0;
+int sube = 1;
+int sube_antes = 1;
+int baja = 1;
+int baja_antes = 1;
+int reset = 1;
+int reset_antes = 1;
+
+//Declaramos la función que cumple cada elemento 
+
+void setup()
+{
+    pinMode(PULSADOR_RESET, INPUT_PULLUP);
+    pinMode(PULSADOR_SUBE, INPUT_PULLUP);
+    pinMode(PULSADOR_BAJA, INPUT_PULLUP);
+    pinMode(A, OUTPUT);
+    pinMode(B, OUTPUT);
+    pinMode(C, OUTPUT);
+    pinMode(D, OUTPUT);
+    pinMode(E, OUTPUT);
+    pinMode(F, OUTPUT);
+    pinMode(G, OUTPUT);
+  	pinMode(UNIDAD, OUTPUT);
+  	pinMode(DECENA, OUTPUT);
+    digitalWrite(UNIDAD, 0);
+  	digitalWrite(DECENA, 0);
+  	display_numeros(0);
+    Serial.begin(9600);
+}
+
+
+void loop()
+	{
+
+	//Función utilizada para comprobar si el botón pulsado sube, 
+	//baja o reincia el display
+
+	int apretado = boton_apretado();
+  
+  	if(apretado == PULSADOR_SUBE)
+    {
+    	contador++;
+      	if(contador > 99){
+        	contador = 0;
+        }
+    }
+  	else if(apretado == PULSADOR_BAJA)
+    {
+    	contador--;
+      	if(contador < 0){
+        	contador = 99;
+        }
+    }
+  	else if(apretado == PULSADOR_RESET)
+    {
+    	contador = 0;
+    }
+  
+  	display_contador(contador);
+}
+
+void display_numeros(int numero)
+//Dependiendo del pulsador apretado el display muestra
+//el valor correspondiente 
+	{
+  
+	digitalWrite(A, HIGH);
+    digitalWrite(B, HIGH);
+    digitalWrite(C, HIGH);
+    digitalWrite(D, HIGH);
+    digitalWrite(E, HIGH);
+    digitalWrite(F, HIGH);
+    digitalWrite(G, HIGH);
+  
+    switch(numero){
+      case 0:
+        digitalWrite(A, LOW);
+        digitalWrite(B, LOW);
+        digitalWrite(C, LOW);
+        digitalWrite(D, LOW);
+        digitalWrite(E, LOW);
+        digitalWrite(F, LOW);
+        break;
+      case 1:
+        digitalWrite(B, LOW);
+        digitalWrite(C, LOW);
+        break;
+      case 2:
+        digitalWrite(A, LOW);
+        digitalWrite(B, LOW);
+        digitalWrite(E, LOW);
+        digitalWrite(D, LOW);
+        digitalWrite(G, LOW);
+        break;
+      case 3:
+        digitalWrite(A, LOW);
+        digitalWrite(B, LOW);
+        digitalWrite(C, LOW);
+        digitalWrite(D, LOW);
+        digitalWrite(G, LOW);
+        break;
+      case 4:
+        digitalWrite(B, LOW);
+        digitalWrite(C, LOW);
+        digitalWrite(F, LOW);
+        digitalWrite(G, LOW);
+        break;
+      case 5:
+        digitalWrite(A, LOW);
+        digitalWrite(C, LOW);
+        digitalWrite(D, LOW);
+        digitalWrite(F, LOW);
+        digitalWrite(G, LOW);
+        break;
+      case 6:
+        digitalWrite(A, LOW);
+        digitalWrite(C, LOW);
+        digitalWrite(D, LOW);
+        digitalWrite(E, LOW);
+        digitalWrite(F, LOW);
+        digitalWrite(G, LOW);
+        break;
+      case 7:
+        digitalWrite(A, LOW);
+        digitalWrite(B, LOW);
+        digitalWrite(C, LOW);
+        break;
+      case 8:
+        digitalWrite(A, LOW);
+        digitalWrite(B, LOW);
+        digitalWrite(C, LOW);
+        digitalWrite(D, LOW);
+        digitalWrite(E, LOW);
+        digitalWrite(F, LOW);
+      	digitalWrite(G, LOW);
+        break;
+      case 9:
+        digitalWrite(A, LOW);
+        digitalWrite(B, LOW);
+        digitalWrite(C, LOW);
+        digitalWrite(F, LOW);
+        digitalWrite(G, LOW);
+        break;
+    }
+}
+
+void switch_On(int numero)
+//Indica que display cambia dependiendo si el contador
+//modifica a la unidad o a la decena
+	
+{
+	if(numero == UNIDAD)
+    {
+    	digitalWrite(UNIDAD, HIGH);
+      	digitalWrite(DECENA, LOW);
+      	delay(10);
+    }
+  	else if(numero == DECENA)
+    {
+    	digitalWrite(UNIDAD, LOW);
+      	digitalWrite(DECENA, HIGH);
+      	delay(10);
+    }
+  	else
+    {
+    	digitalWrite(UNIDAD, LOW);
+      	digitalWrite(DECENA, LOW);
+    }
+}
+
+void display_contador(int contador)
+  	//Muestra el número en el display dependiendo si el contador
+  	//sube o disminuye
+	{
+  
+	switch_On(OFF);
+  	display_numeros(contador/10);
+  	switch_On(DECENA);
+  	switch_On(OFF);
+  	display_numeros(contador - 10 * ((int)contador / 10));
+  	switch_On(UNIDAD);
+	}
+
+int boton_apretado(void)
+  //declara cada botón pulsado
+{
+
+	sube = digitalRead(PULSADOR_SUBE);
+  	baja = digitalRead(PULSADOR_BAJA);
+  	reset = digitalRead(PULSADOR_RESET);
+  
+  	
+  	if(sube){
+    	sube_antes = 1;  
+    }
+   	if(baja){
+    	baja_antes = 1;
+    }
+    if(reset){
+    	reset_antes = 1;
+    }
+  
+  	
+  	if(sube == 0 && sube != sube_antes)
+    {
+    	sube_antes = sube;
+      	return PULSADOR_SUBE;
+    }
+  	if(baja == 0 && baja != baja_antes)
+    {
+    	baja_antes = baja;
+      	return PULSADOR_BAJA;
+    }
+    if(reset == 0 && reset != reset_antes)
+    {
+    	reset_antes = reset;
+      	return PULSADOR_RESET;
+    }
+  
+ return 0;
+}

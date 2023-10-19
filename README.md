@@ -10,8 +10,9 @@ controlar la cuenta. El contador va a comenzar en 0, aumentando o disminuyendo
 su valor en una unidad con los botones.
 # Función principal:
 Esta función se encarga de (dependiendo el display presionado) mostrar el valor correspondiente. 
+
 void display_numeros(int numero)
-	{
+{
   
 	digitalWrite(A, HIGH);
     digitalWrite(B, HIGH);

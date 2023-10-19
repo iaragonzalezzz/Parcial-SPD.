@@ -6,7 +6,7 @@ Kevarkian Candela.
 ![ae2551b8-6c82-4473-a847-13d130324a13](https://github.com/iaragonzalezzz/Parcial-SPD./assets/123982656/6714bd4b-de2e-4e86-8019-8ddfe944ac6f)
 # Descripción:
 Se utiliza un contador de 0 a 99 usando dos displays de 7 segmentos y tres botones para
-controlar la cuenta. El contador va a comenzar en 0, aumentando o disminuyendo
+controlar la cuenta. El contador va a comenzar en 0, aumentando, disminuyendo o reseteando
 su valor en una unidad con los botones.
 # Función principal:
 Esta función se encarga de (dependiendo el display presionado) mostrar el valor correspondiente. 
